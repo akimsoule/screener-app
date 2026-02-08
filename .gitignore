@@ -1,0 +1,13 @@
+node_modules
+dist
+coverage
+.DS_Store
+*.log
+.env
+
+/src/generated/prisma
+
+package-lock.json
+
+# Local Netlify folder
+.netlify

@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Symbol {
+  id        String  @id @default(cuid())
+  name      String  @unique // Le symbole tel qu'utilisé par l'API (AAPL, BTC-USD, etc.)
+  enabled   Boolean @default(true)
+  isPopular Boolean @default(false) // Symboles populaires visibles par tous
+
+  // Type de symbole (détecté automatiquement)
+  symbolType String? // CRYPTO, US_STOCK, CANADIAN_STOCK, INTERNATIONAL
+  provider   String? // Provider qui fonctionne: "yahoo", "bitget"
+
+  // Métadonnées enrichies (fetchMetadata) - Format JSON flexible
+  metadata Json? // Stocke toutes les métadonnées de manière flexible
+
+  // Dernière analyse
+  lastAction String? // Dernière action recommandée (STRONG_BUY, BUY, HOLD, SELL, STRONG_SELL)
+  lastScore  Int? // Dernier score calculé
+  lastPrice  Float? // Dernier prix connu
+  analyzedAt DateTime? // Date de la dernière analyse (pour système de cycles)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([symbolType])
+  @@index([isPopular])
+  @@index([analyzedAt]) // Pour le système de cycles incrémentaux
+}
+
+model AlertHistory {
+  id       String   @id @default(cuid())
+  symbol   String
+  action   String // ACHAT, VENTE, etc.
+  score    Int
+  price    Float?
+  sentAt   DateTime @default(now())
+  dateSent String // Format YYYY-MM-DD pour regroupement journalier
+
+  @@unique([symbol, dateSent]) // Un symbole ne peut avoir qu'une alerte par jour
+  @@index([dateSent])
+  @@index([symbol])
+}
+
+model Cache {
+  id        String   @id @default(cuid())
+  key       String   @unique // Clé complète (ex: "yahoo:suggestions:aapl", "yahoo:metadata:tsla")
+  value     Json // Données au format JSON
+  category  String // Type: "suggestions", "metadata", "ohlc", "quote"
+  provider  String? // Provider source: "yahoo", "bitget", etc.
+  expiresAt DateTime // Date d'expiration pour auto-cleanup
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([provider])
+  @@index([expiresAt]) // Pour nettoyer les entrées expirées
+  @@index([category, provider])
+}
+
+model AnalysisError {
+  id              String   @id @default(cuid())
+  symbolId        String
+  symbolName      String
+  errorType       String // "INSUFFICIENT_DATA", "API_ERROR", "ANALYSIS_ERROR", etc.
+  errorMessage    String
+  metadata        Json? // Détails supplémentaires (nombre de candles, etc.)
+  count           Int      @default(1) // Nombre d'occurrences de cette erreur
+  firstOccurredAt DateTime @default(now())
+  lastOccurredAt  DateTime @default(now())
+
+  @@unique([symbolId, errorType]) // Une seule entrée par symbole/type d'erreur
+  @@index([symbolName])
+  @@index([errorType])
+  @@index([lastOccurredAt])
+}

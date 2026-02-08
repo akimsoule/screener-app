@@ -1,0 +1,53 @@
+{
+  "name": "screener-app",
+  "version": "1.0.0",
+  "description": "TypeScript CLI application with Vitest",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "seed": "tsx prisma/seed.ts",
+    "convert:alpha": "tsx scripts/convert-alpha.ts",
+    "extract:canadian": "tsx scripts/extract-canadian.ts",
+    "analysis": "tsx src/app/analysis/scripts/runAnalysis.ts",
+    "analysis:macro": "tsx src/app/analysis/scripts/runMacroAnalysis.ts",
+    "screener": "tsx src/app/analysis/scripts/runScreener.ts",
+    "batch": "tsx src/app/analysis/scripts/runBatch.ts",
+    "test:symbol": "tsx src/app/analysis/scripts/testSymbol.ts",
+    "scan:penny": "tsx src/app/analysis/scripts/scanPennyStocks.ts",
+    "filters": "tsx src/app/analysis/scripts/displayFilters.ts",
+    "errors": "tsx src/app/analysis/scripts/viewErrors.ts",
+    "debug:cache": "tsx test-functionnal/check-cache.ts",
+    "debug:metadata": "tsx test-functionnal/check-metadata.ts",
+    "debug:canadian": "tsx test-functionnal/check-canadian-symbols.ts",
+    "debug:symbols": "node test-functionnal/check-symbols.mjs",
+    "debug:crypto": "tsx test-functionnal/check-crypto-mapping.ts",
+    "debug:yahoo": "tsx test-functionnal/test-yahoo-metadata.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.2.0",
+    "@types/node-cache": "^4.1.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "@types/express": "^5.0.6",
+    "axios": "^1.13.4",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "node-cache": "^5.1.2",
+    "p-limit": "^7.3.0",
+    "prisma": "^7.3.0",
+    "technicalindicators": "^3.1.0",
+    "yahoo-finance2": "^3.13.0"
+  }
+}
