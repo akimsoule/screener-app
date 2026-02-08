@@ -1,8 +1,8 @@
-import { fetchQuote, SymbolType } from "../../../lib/data/index.js";
-import { yahoo } from "../../../lib/data/provider/yahoo.js";
-import { cache } from "../../../lib/cache.js";
+import { fetchQuote, SymbolType } from "../../lib/data/index.js";
+import { yahoo } from "../../lib/data/provider/yahoo.js";
+import { cache } from "../../lib/cache.js";
 import type { MacroContextInput } from "./macroService.js";
-import { logger } from "../../../lib/logger.js";
+import { logger } from "../../lib/logger.js";
 
 /**
  * SERVICE DE RÉCUPÉRATION DES DONNÉES MACROÉCONOMIQUES

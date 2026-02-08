@@ -1,4 +1,4 @@
-import { yahoo } from "../src/lib/data/provider/yahoo";
+import { yahoo } from "../src/app/lib/data/provider/yahoo";
 
 console.log("📡 Test fetchMetadata pour AAPL...\n");
 

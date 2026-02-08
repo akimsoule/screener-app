@@ -10,7 +10,7 @@
  */
 
 import { analyzeMacroContextWithRealData } from "../index.js";
-import { logger, getErrorMessage } from "../../../lib/logger.js";
+import { logger, getErrorMessage } from "../../lib/logger.js";
 
 async function main() {
   logger.info("\n🌍 ANALYSE MACRO EN TEMPS RÉEL\n");

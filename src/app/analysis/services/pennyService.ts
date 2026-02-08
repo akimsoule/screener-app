@@ -1,13 +1,13 @@
-import { prisma } from "../../../lib/prisma";
-import { cache } from "../../../lib/cache";
-import { logger, getErrorMessage } from "../../../lib/logger";
+import { prisma } from "../../lib/prisma";
+import { cache } from "../../lib/cache";
+import { logger, getErrorMessage } from "../../lib/logger";
 import {
   fetchMetadata,
   fetchQuote,
   fetchSymbolsFromDummyScreener,
-} from "../../../lib/data/index";
-import type { Quote, SymbolMetadata } from "../../../lib/data/provider/types";
-import { SymbolType } from "../../../lib/data/provider/types";
+} from "../../lib/data/index";
+import type { Quote, SymbolMetadata } from "../../lib/data/provider/types";
+import { SymbolType } from "../../lib/data/provider/types";
 import pLimit from "p-limit";
 import { Prisma } from "@prisma/client";
 

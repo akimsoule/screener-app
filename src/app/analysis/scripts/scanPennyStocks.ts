@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { logger } from "../../../lib/logger.js";
+import { logger } from "../../lib/logger.js";
 import { pennyService } from "../services/pennyService.js";
 
 (async function main() {

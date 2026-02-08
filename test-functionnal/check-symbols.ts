@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { prisma } from "../src/lib/prisma.js";
+import { prisma } from "../src/app/lib/prisma.js";
 
 try {
   const symbols = await prisma.symbol.findMany({

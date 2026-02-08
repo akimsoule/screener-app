@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 import "dotenv/config";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../lib/prisma";
 import { filterService } from "../services/filterService";
 import { analysisService } from "../services/analysisService";
 import { analyzeMacroContextWithRealData } from "../services/macroService";
-import { logger } from "../../../lib/logger.js";
+import { logger } from "../../lib/logger.js";
 
 /**
  * SCRIPT SCREENER - TEST DU SERVICE DE SCREENING

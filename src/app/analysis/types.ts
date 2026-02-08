@@ -1,5 +1,5 @@
 // =============== IMPORTS ===============
-export type { SymbolMetadata } from "../../lib/data/provider/types";
+export type { SymbolMetadata } from "../lib/data/provider/types";
 
 // =============== TYPES ===============
 

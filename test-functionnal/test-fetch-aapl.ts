@@ -1,5 +1,5 @@
-import { fetchMetadata } from "../src/lib/data";
-import { SymbolType } from "../src/lib/data/provider/types";
+import { fetchMetadata } from "../src/app/lib/data";
+import { SymbolType } from "../src/app/lib/data/provider/types";
 
 console.log("🔍 Fetching metadata for AAPL...");
 try {

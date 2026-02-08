@@ -1,4 +1,4 @@
-import { prisma } from "../src/lib/prisma";
+import { prisma } from "../src/app/lib/prisma";
 
 try {
   const symbols = await prisma.symbol.findMany({

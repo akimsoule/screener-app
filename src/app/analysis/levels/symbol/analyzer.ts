@@ -8,7 +8,7 @@
  * - Métadonnées enrichies
  */
 
-import { SymbolType } from "../../../../lib/data";
+import { SymbolType } from "../../../lib/data";
 import { getPrices, detectSymbolType } from "../../prices";
 import type {
   AnalysisReport,
@@ -23,7 +23,7 @@ import {
   REGIME_THRESHOLDS,
   TRADE_PARAMS,
 } from "../../constants";
-import { logger } from "../../../../lib/logger";
+import { logger } from "../../../lib/logger";
 
 import {
   DEFAULT_RISK_CONFIG,

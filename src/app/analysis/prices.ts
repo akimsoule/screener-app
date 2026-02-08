@@ -1,8 +1,8 @@
 // prices.ts
 // Retrieve price series from Finnhub
-import { fetchOHLC, fetchQuote, SymbolType } from "../../lib/data";
+import { fetchOHLC, fetchQuote, SymbolType } from "../lib/data";
 import type { OHLC } from "./types";
-import { logger } from "../../lib/logger.js";
+import { logger } from "../lib/logger.js";
 
 // Patterns de détection
 const CRYPTO_PATTERN = /(USDT|USDC|BUSD|USD|EUR|BTC)$/i;

@@ -1,4 +1,4 @@
-import { bitget } from "../src/lib/data/provider/bitget.js";
+import { bitget } from "../src/app/lib/data/provider/bitget.js";
 
 try {
   console.log("Testing Bitget fetchQuote...\n");

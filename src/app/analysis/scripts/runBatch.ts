@@ -5,7 +5,7 @@
  */
 
 import "dotenv/config";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../lib/prisma";
 import { analysisService } from "../services/analysisService";
 import { analyzeMacroContextWithRealData } from "../services/macroService";
 import { fetchRealMacroData } from "../services/macroDataService";

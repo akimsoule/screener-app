@@ -1,13 +1,13 @@
-import { bitget } from "../../../lib/data/provider/bitget.js";
-import { yahoo } from "../../../lib/data/provider/yahoo.js";
+import { bitget } from "../../lib/data/provider/bitget.js";
+import { yahoo } from "../../lib/data/provider/yahoo.js";
 import type {
   SymbolType,
   Suggestion,
   OHLC,
   SymbolMetadata,
   Quote,
-} from "../../../lib/data/provider/types.js";
-import { logger, getErrorMessage } from "../../../lib/logger.js";
+} from "../../lib/data/provider/types.js";
+import { logger, getErrorMessage } from "../../lib/logger.js";
 
 /**
  * SERVICE DE DONNÉES - COUCHE MÉTIER

@@ -1,7 +1,7 @@
-import { prisma } from "../../../lib/prisma";
-import { fetchMetadata } from "../../../lib/data/index";
-import { logger, getErrorMessage } from "../../../lib/logger";
-import type { SymbolType } from "../../../lib/data/provider/types";
+import { prisma } from "../../lib/prisma";
+import { fetchMetadata } from "../../lib/data/index";
+import { logger, getErrorMessage } from "../../lib/logger";
+import type { SymbolType } from "../../lib/data/provider/types";
 
 /**
  * SERVICE SYMBOL - COUCHE MÉTIER

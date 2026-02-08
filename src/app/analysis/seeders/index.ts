@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
-import { fetchMetadata } from "../../../lib/data";
-import { prisma } from "../../../lib/prisma";
+import { fetchMetadata } from "../../lib/data";
+import { prisma } from "../../lib/prisma";
 import { detectSymbolType } from "../prices";
-import { getErrorMessage } from "../../../lib/logger.js";
-import { bitget } from "../../../lib/data/provider/bitget.js";
+import { getErrorMessage } from "../../lib/logger.js";
+import { bitget } from "../../lib/data/provider/bitget.js";
 import { existingSymbols } from "./existing_symbol";
 
 async function processBatch<T, R>(

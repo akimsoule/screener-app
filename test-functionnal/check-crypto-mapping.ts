@@ -3,7 +3,7 @@
  * Vérifie si les symboles normalisés existent sur Bitget
  */
 
-import { bitget } from "../src/lib/data/provider/bitget.js";
+import { bitget } from "../src/app/lib/data/provider/bitget.js";
 import { existingSymbols } from "../src/app/analysis/seeders/existing_symbol.js";
 
 try {

@@ -1,7 +1,7 @@
-import { prisma } from "../src/lib/prisma";
-import { cache } from "../src/lib/cache";
-import { CanadianSymbol } from "../src/lib/data/provider/types";
-import { logger, getErrorMessage } from "../src/lib/logger";
+import { prisma } from "../src/app/lib/prisma";
+import { cache } from "../src/app/lib/cache";
+import { CanadianSymbol } from "../src/app/lib/data/provider/types";
+import { logger, getErrorMessage } from "../src/app/lib/logger";
 
 const CANADIAN_EXCHANGES = new Set([
   "TSX",
