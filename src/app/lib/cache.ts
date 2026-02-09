@@ -19,7 +19,8 @@ type CacheCategory =
   | "quote"
   | "watchlist"
   | "screener"
-  | "symbols";
+  | "symbols"
+  | "macro";
 
 class CacheSystem {
   private readonly memoryCache = new Map<string, CacheEntry<any>>();

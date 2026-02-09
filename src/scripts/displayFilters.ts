@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 import "dotenv/config";
-import { filterService } from "../services/filterService.js";
-import { logger } from "../../lib/logger.js";
+import { filterService } from "../app/analysis/services/filterService.js";
+import { logger } from "../app/lib/logger.js";
 
 /**
  * SCRIPT D'AFFICHAGE DES FILTRES DISPONIBLES

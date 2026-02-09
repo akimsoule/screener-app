@@ -4,7 +4,7 @@
  */
 
 import "dotenv/config";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../src/app/lib/prisma";
 
 async function viewErrors() {
   console.log("\n" + "=".repeat(80));

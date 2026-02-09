@@ -1,6 +1,9 @@
 import { detectMacroRegime } from "../levels/levelMacro";
 import { calculateAssetClassBias } from "../levels/levelAssetClass";
 import { fetchRealMacroData } from "./macroDataService.js";
+import { cache } from "../../lib/cache.js";
+import { logger } from "../../lib/logger.js";
+import { MACRO_CACHE_TTL } from "../../lib/constants";
 import type { MacroRegime, AssetClassBias } from "../types";
 
 /**
@@ -34,14 +37,33 @@ export interface MacroAnalysisResult {
   };
 }
 
+export interface MacroAnalysisWithMeta extends MacroAnalysisResult {
+  fromCache: boolean; // true if result was returned from cache
+  regimeChanged?: boolean; // true if regime changed compared to previous cached value
+  previousRegime?: string; // previous regime string (phase/cycle)
+}
+
 /**
  * Récupère et analyse les données macro en temps réel
  */
-export async function analyzeMacroContextWithRealData(): Promise<MacroAnalysisResult> {
-  // Récupération des données réelles
+export async function analyzeMacroContextWithRealData(): Promise<MacroAnalysisWithMeta> {
+  const cacheKey = "macro_context";
+
+  // 1) Vérifier le cache d'abord
+  const cachedResult =
+    await cache.getWithFallback<MacroAnalysisResult>(cacheKey);
+  if (cachedResult) {
+    logger.debug(
+      `[CACHE] Hit: ${cacheKey} (source=${cachedResult.metadata?.source || "unknown"}, timestamp=${cachedResult.metadata?.timestamp || "unknown"})`,
+    );
+    return { ...cachedResult, fromCache: true };
+  }
+  logger.debug(`[CACHE] Miss: ${cacheKey}`);
+
+  // 2) Récupération des données réelles
   const { _metadata, ...marketData } = await fetchRealMacroData();
 
-  // Analyse macro
+  // 3) Analyse macro
   const result = analyzeMacroContext(marketData);
 
   // Enrichissement des insights avec Fear & Greed si disponible
@@ -68,11 +90,39 @@ export async function analyzeMacroContextWithRealData(): Promise<MacroAnalysisRe
     }
   }
 
-  // Ajout des métadonnées
-  return {
+  // 4) Ajout des métadonnées
+  const finalResult: MacroAnalysisResult = {
     ...result,
     insights: enrichedInsights,
     metadata: _metadata,
+  };
+
+  // 5) Vérifier l'ancien régime s'il existait (pour détecter changement)
+  let previousRegime: string | undefined;
+  try {
+    const previous = await cache.getDb<MacroAnalysisResult>(cacheKey);
+    if (previous?.regime) {
+      previousRegime = `${previous.regime.phase}/${previous.regime.cycleStage}`;
+    }
+  } catch (err) {
+    logger.warn(
+      `⚠️ Échec lecture cache précédente (${cacheKey}): ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+
+  // 6) Mettre en cache pour 30 minutes
+  await cache.setDb(cacheKey, finalResult, "macro", MACRO_CACHE_TTL);
+
+  const currentRegime = `${finalResult.regime.phase}/${finalResult.regime.cycleStage}`;
+  const regimeChanged = previousRegime
+    ? previousRegime !== currentRegime
+    : false;
+
+  return {
+    ...finalResult,
+    fromCache: false,
+    regimeChanged,
+    previousRegime,
   };
 }
 

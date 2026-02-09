@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
 import "dotenv/config";
-import { prisma } from "../../lib/prisma";
-import { analysisService } from "../services/analysisService";
-import type { AnalysisReport } from "../types";
-import { getErrorMessage, logger } from "../../lib/logger.js";
+import { prisma } from "../src/app/lib/prisma";
+import { analysisService } from "../src/app/analysis/services/analysisService";
+import type { AnalysisReport } from "../src/app/analysis/types";
+import { getErrorMessage, logger } from "../src/app/lib/logger.js";
 
 /**
  * SCRIPT D'ANALYSE - MODE CONSOLE

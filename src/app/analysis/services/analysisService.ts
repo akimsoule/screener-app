@@ -1,8 +1,11 @@
 import { analyzeSymbol } from "../levels/symbol";
-import { detectMacroRegime } from "../levels/levelMacro";
-import { calculateAssetClassBias } from "../levels/levelAssetClass";
+import { analyzeMacroContext } from "./macroService";
 import { getMarketData } from "../prices";
+import { cache } from "../../lib/cache";
+import { logger } from "../../lib/logger";
+import { ANALYSIS_CACHE_TTL } from "../../lib/constants";
 import type { AnalysisReport, MacroRegime, AssetClassBias } from "../types";
+import type { MacroContextInput } from "./macroService";
 
 /**
  * SERVICE D'ANALYSE - COUCHE MÉTIER
@@ -43,24 +46,61 @@ export class AnalysisService {
    */
   async analyzeSymbolWithMacro(
     symbol: string,
-    marketContext: Parameters<typeof detectMacroRegime>[0],
+    marketContext: MacroContextInput,
     options: AnalysisServiceOptions = {},
   ): Promise<EnrichedAnalysisReport> {
     const { riskConfig = {} } = options;
 
-    // Étape 1 : Détection du régime macro
-    const macroRegime = detectMacroRegime(marketContext);
+    // Étape 1 : Analyse macro via macroService (regime + assetBias)
+    const macroAnalysis = analyzeMacroContext(marketContext);
+    const macroRegime = macroAnalysis.regime;
+    const assetBias = macroAnalysis.assetBias;
+    // ----------------------- CACHE: AnalysisReport -----------------------
+    // Construire une clé de cache stable basée sur le symbole et le régime macro
+    const regimeKey = `${macroRegime.phase ?? "unknown"}:${macroRegime.cycleStage ?? "na"}:${Math.round((macroRegime.confidence ?? 0) * 100)}`;
+    const cacheKey = `analysis:report:${symbol}:regime:${regimeKey}`;
 
-    // Étape 2 : Calcul des biais sectoriels
-    const assetBias = calculateAssetClassBias(macroRegime);
+    try {
+      // Lecture cache (mémoire -> DB)
+      const cached =
+        await cache.getWithFallback<EnrichedAnalysisReport>(cacheKey);
+
+      if (cached) {
+        logger.debug(`[CACHE] Hit: ${cacheKey}`);
+        // Return cached result including assetBias (cached should already include it)
+        return cached;
+      }
+      logger.debug(`[CACHE] Miss: ${cacheKey}`);
+    } catch (err) {
+      // Ne pas bloquer l'analyse en cas d'erreur cache
+      // eslint-disable-next-line no-console
+      console.warn(
+        `⚠️ Échec lecture cache (${cacheKey}): ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
+    // --------------------------------------------------------------------
 
     // Étape 3 : Analyse technique du symbole avec contexte macro
     const baseReport = await analyzeSymbol(symbol, riskConfig, macroRegime);
 
-    return {
+    const finalReport: EnrichedAnalysisReport = {
       ...baseReport,
       assetBias,
     };
+
+    // Écrire dans le cache (mémoire + DB) pour 15 minutes
+    try {
+      cache.set(cacheKey, finalReport, ANALYSIS_CACHE_TTL);
+      await cache.setDb(cacheKey, finalReport, "screener", ANALYSIS_CACHE_TTL);
+      logger.debug(`[CACHE] Wrote: ${cacheKey}`);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `⚠️ Échec écriture cache (${cacheKey}): ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
+
+    return finalReport;
   }
 
   /**

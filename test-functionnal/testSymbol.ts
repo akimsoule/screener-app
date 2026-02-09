@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
 import "dotenv/config";
-import { prisma } from "../../lib/prisma";
-import { analysisService } from "../services/analysisService";
-import { analyzeMacroContextWithRealData } from "../services/macroService";
-import { logger } from "../../lib/logger.js";
+import { prisma } from "../src/app/lib/prisma";
+import { analysisService } from "../src/app/analysis/services/analysisService";
+import { analyzeMacroContextWithRealData } from "../src/app/analysis/services/macroService";
+import { logger } from "../src/app/lib/logger.js";
 
 /**
  * SCRIPT TEST SYMBOLE - ANALYSE RAPIDE D'UN SYMBOLE SPÉCIFIQUE

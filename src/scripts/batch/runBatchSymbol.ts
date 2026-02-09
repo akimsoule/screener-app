@@ -5,10 +5,9 @@
  */
 
 import "dotenv/config";
-import { prisma } from "../../lib/prisma";
-import { analysisService } from "../services/analysisService";
-import { analyzeMacroContextWithRealData } from "../services/macroService";
-import { fetchRealMacroData } from "../services/macroDataService";
+import { prisma } from "../../app/lib/prisma";
+import { analysisService } from "../../app/analysis/services/analysisService";
+import { fetchRealMacroData } from "../../app/analysis/services/macroDataService";
 
 const BATCH_SIZE = 20;
 const STALE_THRESHOLD_MINUTES = 15;
