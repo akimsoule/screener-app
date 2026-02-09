@@ -9,8 +9,8 @@
  *   tsx src/app/analysis/scripts/runMacroAnalysis.ts
  */
 
-import { analyzeMacroContextWithRealData } from "../app/analysis/index.js";
-import { logger, getErrorMessage } from "../app/lib/logger.js";
+import { analyzeMacroContextWithRealData } from "../analysis/index.js";
+import { logger, getErrorMessage } from "../lib/logger.js";
 
 async function main() {
   logger.info("\n🌍 ANALYSE MACRO EN TEMPS RÉEL\n");

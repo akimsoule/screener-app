@@ -1,8 +1,8 @@
 #!/usr/bin/env tsx
 import "dotenv/config";
-import { logger } from "../app/lib/logger.js";
-import { watchlistService } from "../app/analysis/services/watchlistService.js";
-import type { FilterOptions } from "../app/analysis/services/filterService.js";
+import { logger } from "../lib/logger.js";
+import { watchlistService } from "../analysis/services/watchlistService.js";
+import type { FilterOptions } from "../analysis/services/filterService.js";
 
 /**
  * SCRIPT D'AFFICHAGE DE LA WATCHLIST

@@ -5,8 +5,8 @@
  */
 
 import "dotenv/config";
-import { analyzeMacroContextWithRealData } from "../../app/analysis/index.js";
-import { logger, getErrorMessage } from "../../app/lib/logger.js";
+import { analyzeMacroContextWithRealData } from "../../analysis/index.js";
+import { logger, getErrorMessage } from "../../lib/logger.js";
 
 const MACRO_STALE_THRESHOLD_MINUTES = 60; // 1 heure
 

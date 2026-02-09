@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 
-import { logger } from "../../app/lib/logger.js";
-import { pennyService } from "../../app/analysis/services/pennyService.js";
+import { logger } from "../../lib/logger.js";
+import { pennyService } from "../../analysis/services/pennyService.js";
 
 try {
   logger.info("🚀 Running pennyService.scan()...");
