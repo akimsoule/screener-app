@@ -148,6 +148,26 @@ class CacheSystem {
   }
 
   /**
+   * Delete cache entries matching a prefix (memory + DB)
+   */
+  async deleteByPrefix(prefix: string): Promise<void> {
+    // Memory cache
+    for (const key of Array.from(this.memoryCache.keys())) {
+      if (key.startsWith(prefix)) this.memoryCache.delete(key);
+    }
+
+    // DB cache
+    try {
+      await prisma.cache.deleteMany({ where: { key: { startsWith: prefix } } });
+    } catch (error) {
+      logger.error(
+        `❌ Error deleting DB cache by prefix (${prefix}):`,
+        getErrorMessage(error),
+      );
+    }
+  }
+
+  /**
    * Clear memory cache
    */
   clear(): void {
