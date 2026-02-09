@@ -13,6 +13,7 @@
     "batch:symbol": "tsx src/scripts/batch/runBatchSymbol.ts",
     "batch:macro": "tsx src/scripts/batch/runBatchMacro.ts",
     "batch:penny": "tsx src/scripts/batch/runBatchPennyStocks.ts",
+    "display:watchlist": "tsx src/scripts/displayWatchlist.ts",
     "debug:cache": "tsx test-functionnal/check-cache.ts",
     "debug:metadata": "tsx test-functionnal/check-metadata.ts",
     "debug:canadian": "tsx test-functionnal/check-canadian-symbols.ts",
