@@ -4,6 +4,7 @@ import { getMarketData } from "../prices";
 import { cache } from "../../lib/cache";
 import { logger } from "../../lib/logger";
 import { ANALYSIS_CACHE_TTL } from "../../lib/constants";
+import { prisma } from "../../lib/prisma";
 import type { AnalysisReport, MacroRegime, AssetClassBias } from "../types";
 import type { MacroContextInput } from "./macroService";
 
@@ -38,7 +39,29 @@ export class AnalysisService {
     options: AnalysisServiceOptions = {},
   ): Promise<AnalysisReport> {
     const { riskConfig = {} } = options;
-    return analyzeSymbol(symbol, riskConfig);
+    const report = await analyzeSymbol(symbol, riskConfig);
+
+    // Mettre à jour la base de données avec les derniers résultats d'analyse
+    try {
+      await prisma.symbol.update({
+        where: { name: symbol },
+        data: {
+          lastAction: report.action,
+          lastScore: report.score,
+          lastPrice: report.details.price,
+          analyzedAt: report.timestamp ?? new Date(),
+        },
+      });
+      logger.debug(
+        `[DB] Updated symbol ${symbol} with lastAction/lastScore/lastPrice/analyzedAt`,
+      );
+    } catch (err) {
+      logger.warn(
+        `⚠️ Erreur mise à jour DB pour ${symbol}: ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
+
+    return report;
   }
 
   /**
@@ -97,6 +120,26 @@ export class AnalysisService {
       // eslint-disable-next-line no-console
       console.warn(
         `⚠️ Échec écriture cache (${cacheKey}): ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
+
+    // Mettre à jour la base de données avec les derniers résultats d'analyse
+    try {
+      await prisma.symbol.update({
+        where: { name: symbol },
+        data: {
+          lastAction: finalReport.action,
+          lastScore: finalReport.score,
+          lastPrice: finalReport.details.price,
+          analyzedAt: finalReport.timestamp ?? new Date(),
+        },
+      });
+      logger.debug(
+        `[DB] Updated symbol ${symbol} with lastAction/lastScore/lastPrice/analyzedAt`,
+      );
+    } catch (err) {
+      logger.warn(
+        `⚠️ Erreur mise à jour DB pour ${symbol}: ${err instanceof Error ? err.message : String(err)}`,
       );
     }
 
